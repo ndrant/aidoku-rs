@@ -2,7 +2,7 @@
 	"info": {
 		"id": "id.shinigami",
 		"name": "Shinigami",
-		"version": 1,
+		"version": 2,
 		"urls": ["https://shinigami.asia/"],
 		"contentRating": 1,
 		"languages": ["id"]

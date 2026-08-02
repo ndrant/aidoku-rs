@@ -34,6 +34,7 @@ jobs:
             mkdir -p Payload
             cp target/wasm32-unknown-unknown/release/comic_source.wasm Payload/main.wasm
             cp "res/$site.json" Payload/source.json
+            cp "icons/id.$site.png" Payload/icon.png
             zip -r "site/id.$site.aix" Payload
             rm -rf Payload
           done

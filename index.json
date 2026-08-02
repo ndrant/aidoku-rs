@@ -4,7 +4,7 @@
     {
       "id": "id.natsu",
       "name": "Natsu",
-      "version": 6,
+      "version": 7,
       "iconURL": "icons/id.natsu.png?v=2",
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.natsu.aix",
       "languages": ["id"],
@@ -15,7 +15,7 @@
     {
       "id": "id.komikcast",
       "name": "KomikCast",
-      "version": 5,
+      "version": 6,
       "iconURL": "icons/id.komikcast.png?v=2",
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.komikcast.aix",
       "languages": ["id"],
@@ -26,7 +26,7 @@
     {
       "id": "id.shinigami",
       "name": "Shinigami",
-      "version": 1,
+      "version": 2,
       "iconURL": "icons/id.shinigami.png?v=2",
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.shinigami.aix",
       "languages": ["id"],
