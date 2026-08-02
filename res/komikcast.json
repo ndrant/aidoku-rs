@@ -2,7 +2,7 @@
 	"info": {
 		"id": "id.komikcast",
 		"name": "KomikCast",
-		"version": 1,
+		"version": 5,
 		"urls": ["https://v3.komikcast.fit/"],
 		"contentRating": 1,
 		"languages": ["id"]
@@ -10,6 +10,7 @@
 	"filters": [
 		{
 			"type": "sort",
+			"id": "sort",
 			"name": "Sort",
 			"canAscend": false,
 			"options": ["Terbaru", "Populer"]

@@ -10,6 +10,7 @@
 	"filters": [
 		{
 			"type": "sort",
+			"id": "sort",
 			"name": "Sort",
 			"canAscend": false,
 			"options": ["Terbaru", "Populer"]
