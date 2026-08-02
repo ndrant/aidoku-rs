@@ -1,7 +1,10 @@
 #![no_std]
 // Single-site packaging builds only compile their site; silence dead-code
 // for the helpers used exclusively by the intentionally excluded modules.
-#![cfg_attr(not(all(feature = "komikcast", feature = "natsu")), allow(dead_code))]
+#![cfg_attr(
+    not(all(feature = "komikcast", feature = "natsu", feature = "shinigami")),
+    allow(dead_code)
+)]
 
 mod error;
 mod models;

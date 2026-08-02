@@ -29,7 +29,7 @@ jobs:
       - name: Build & assemble packages
         run: |
           mkdir -p site
-          for site in natsu komikcast; do
+          for site in natsu komikcast shinigami; do
             cargo build --release --no-default-features --features "$site"
             mkdir -p Payload
             cp target/wasm32-unknown-unknown/release/comic_source.wasm Payload/main.wasm

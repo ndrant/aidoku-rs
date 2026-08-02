@@ -1,10 +1,26 @@
 {
 	"info": {
 		"id": "id.multisource",
-		"name": "KomikCast & Natsu",
-		"version": 2,
-		"urls": ["https://v3.komikcast.fit/", "https://natsu.one/"],
+		"name": "KomikCast & Natsu & Shinigami",
+		"version": 1,
+		"urls": ["https://v3.komikcast.fit/", "https://natsu.one/", "https://shinigami.asia/"],
 		"contentRating": 1,
 		"languages": ["id"]
-	}
+	},
+	"filters": [
+		{
+			"type": "select",
+			"id": "site",
+			"name": "Site",
+			"options": ["KomikCast", "Natsu", "Shinigami"],
+			"ids": ["komikcast", "natsu", "shinigami"],
+			"default": "komikcast"
+		},
+		{
+			"type": "sort",
+			"name": "Sort",
+			"canAscend": false,
+			"options": ["Terbaru", "Populer"]
+		}
+	]
 }

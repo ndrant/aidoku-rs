@@ -27,20 +27,23 @@ const SITE: &str = "komikcast";
 const LATEST_PRESET: &str = "rilisan_terbaru";
 const LIST_TAKE: i32 = 30;
 
-/// Searches the KomikCast API by title, or lists the latest releases when no
-/// query is provided.
-pub fn search(query: Option<String>, page: i32) -> Result<MangaPageResult> {
-    search_inner(query, page).map_err(|error| error::with_site(SITE, error))
+/// Searches the KomikCast API by title, or lists releases when no query is
+/// provided. `sort_index` selects the order: 0 = "Terbaru" (latest releases),
+/// anything else = "Populer" (the API's default ranking).
+pub fn search(query: Option<String>, page: i32, sort_index: usize) -> Result<MangaPageResult> {
+    search_inner(query, page, sort_index).map_err(|error| error::with_site(SITE, error))
 }
 
-fn search_inner(query: Option<String>, page: i32) -> Result<MangaPageResult> {
+fn search_inner(query: Option<String>, page: i32, sort_index: usize) -> Result<MangaPageResult> {
     let mut query_params = QueryParameters::new();
     match query.as_deref().map(str::trim) {
         Some(query) if !query.is_empty() => {
             query_params.push("title", Some(query));
         }
         _ => {
-            query_params.push("preset", Some(LATEST_PRESET));
+            if sort_index == 0 {
+                query_params.push("preset", Some(LATEST_PRESET));
+            }
         }
     }
     let take = LIST_TAKE.to_string();
@@ -146,14 +149,14 @@ mod tests {
 
     #[aidoku_test]
     fn live_latest_releases() {
-        let result = search(None, 1).expect("latest listing");
+        let result = search(None, 1, 0).expect("latest listing");
         assert_eq!(result.entries.len(), LIST_TAKE as usize);
         assert!(result.has_next_page);
     }
 
     #[aidoku_test]
     fn live_search_by_title() {
-        let result = search(Some(String::from("human")), 1).expect("search");
+        let result = search(Some(String::from("human")), 1, 0).expect("search");
         assert!(!result.entries.is_empty());
         let first = &result.entries[0];
         assert!(!first.key.is_empty());
@@ -167,8 +170,15 @@ mod tests {
     }
 
     #[aidoku_test]
+    fn live_search_sorted_popular() {
+        let result = search(None, 1, 1).expect("popular listing");
+        assert!(!result.entries.is_empty());
+        assert!(result.has_next_page);
+    }
+
+    #[aidoku_test]
     fn live_manga_update_and_pages() {
-        let result = search(Some(String::from("human table")), 1).expect("search");
+        let result = search(Some(String::from("human table")), 1, 0).expect("search");
         let manga = result.entries[0].clone();
         let updated = manga_update(manga, true, true).expect("update");
         assert!(updated.description.is_some());

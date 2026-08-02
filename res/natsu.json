@@ -2,9 +2,17 @@
 	"info": {
 		"id": "id.natsu",
 		"name": "Natsu",
-		"version": 5,
+		"version": 1,
 		"urls": ["https://natsu.one/"],
 		"contentRating": 1,
 		"languages": ["id"]
-	}
+	},
+	"filters": [
+		{
+			"type": "sort",
+			"name": "Sort",
+			"canAscend": false,
+			"options": ["Terbaru", "Populer"]
+		}
+	]
 }

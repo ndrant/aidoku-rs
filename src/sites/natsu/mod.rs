@@ -8,8 +8,9 @@ use crate::error;
 use crate::models::{ChapterInfo, MangaInfo};
 use crate::network;
 use crate::sites::natsu::parser::{
-    chapters_from_document, extract_nonce, manga_info_from_detail, manga_info_from_listing,
-    manga_info_from_search_results, pages_from_document, slug_from_url,
+    chapters_from_document, extract_nonce, manga_info_from_advanced_results,
+    manga_info_from_detail, manga_info_from_listing, manga_info_from_search_results,
+    pages_from_document, slug_from_url,
 };
 use crate::utils;
 
@@ -26,18 +27,24 @@ const SEARCH_AJAX_ACTION: &str = "search";
 const LATEST_PATH: &str = "/latest-update/";
 const LIST_PAGE_SIZE: usize = 24;
 
-/// Searches Natsu, or lists the latest updates when no query is provided.
+/// Searches Natsu, or lists releases when no query is provided. `sort_index`
+/// selects the order: 0 = "Terbaru" (latest updates), anything else =
+/// "Populer" (the advanced-search ranking).
 ///
 /// Keyword search runs through the site's AJAX endpoint and therefore first
 /// fetches a page to obtain the current search nonce.
-pub fn search(query: Option<String>, page: i32) -> Result<MangaPageResult> {
-    search_inner(query, page).map_err(|error| error::with_site(SITE, error))
+pub fn search(query: Option<String>, page: i32, sort_index: usize) -> Result<MangaPageResult> {
+    search_inner(query, page, sort_index).map_err(|error| error::with_site(SITE, error))
 }
 
-fn search_inner(query: Option<String>, page: i32) -> Result<MangaPageResult> {
+fn search_inner(query: Option<String>, page: i32, sort_index: usize) -> Result<MangaPageResult> {
     let query = query.as_deref().map(str::trim).unwrap_or("");
     let entries = if query.is_empty() {
-        latest_listing(page)?
+        if sort_index == 0 {
+            latest_listing(page)?
+        } else {
+            advanced_listing(page)?
+        }
     } else {
         ajax_search(query)?
     };
@@ -61,6 +68,25 @@ fn latest_listing(page: i32) -> Result<Vec<Manga>> {
     let url = format!("{BASE_URL}{path}");
     let document = network::get_html(&url)?;
     Ok(manga_info_from_listing(&document, BASE_URL)
+        .into_iter()
+        .map(MangaInfo::into_aidoku)
+        .collect())
+}
+
+/// Lists releases ordered by the advanced-search ranking ("Populer") through
+/// the AJAX `advanced_search` endpoint.
+fn advanced_listing(page: i32) -> Result<Vec<Manga>> {
+    let nonce = fetch_search_nonce()?;
+    let url = format!("{BASE_URL}{SEARCH_AJAX_PATH}?action=advanced_search");
+    let body = format!("nonce={nonce}&query=&orderby=popular&order=desc&page={page}");
+    let headers = [
+        ("X-Requested-With", "XMLHttpRequest"),
+        ("Referer", BASE_URL),
+    ];
+    let html = network::post_form_string(&url, &body, &headers)?;
+    let document = Html::parse(html.as_bytes())
+        .map_err(|html_error| error::with_url(url, html_error.into()))?;
+    Ok(manga_info_from_advanced_results(&document, BASE_URL)
         .into_iter()
         .map(MangaInfo::into_aidoku)
         .collect())
@@ -166,7 +192,17 @@ mod tests {
 
     #[aidoku_test]
     fn live_latest_listing() {
-        let result = search(None, 1).expect("latest listing");
+        let result = search(None, 1, 0).expect("latest listing");
+        assert!(!result.entries.is_empty());
+        assert!(result.has_next_page);
+        let first = &result.entries[0];
+        assert!(!first.key.is_empty());
+        assert!(!first.title.is_empty());
+    }
+
+    #[aidoku_test]
+    fn live_popular_listing() {
+        let result = search(None, 1, 1).expect("popular listing");
         assert!(!result.entries.is_empty());
         assert!(result.has_next_page);
         let first = &result.entries[0];
@@ -176,7 +212,7 @@ mod tests {
 
     #[aidoku_test]
     fn live_search_by_title() {
-        let result = search(Some(String::from("one piece")), 1).expect("search");
+        let result = search(Some(String::from("one piece")), 1, 0).expect("search");
         assert!(!result.entries.is_empty());
         let first = &result.entries[0];
         assert_eq!(first.key, "one-piece");
@@ -185,7 +221,7 @@ mod tests {
 
     #[aidoku_test]
     fn live_manga_update_and_pages() {
-        let result = search(None, 1).expect("latest listing");
+        let result = search(None, 1, 0).expect("latest listing");
         let manga = result.entries[0].clone();
         let updated = manga_update(manga, true, true).expect("update");
         assert!(updated.description.is_some() || !updated.title.is_empty());

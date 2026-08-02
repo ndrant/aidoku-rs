@@ -96,6 +96,21 @@ pub fn manga_info_from_search_results(document: &Document, base_url: &str) -> Ve
     entries
 }
 
+/// Parses the manga cards returned by the AJAX advanced-search endpoint,
+/// where each card is a top-level `<div>` in the response fragment. The card
+/// structure matches the latest-update grid, so cards share [manga_info_from_card].
+pub fn manga_info_from_advanced_results(document: &Document, base_url: &str) -> Vec<MangaInfo> {
+    let mut entries = Vec::new();
+    if let Some(cards) = document.select("body > div") {
+        for card in cards {
+            if let Some(info) = manga_info_from_card(&card, base_url) {
+                entries.push(info);
+            }
+        }
+    }
+    entries
+}
+
 fn manga_info_from_search_result(result: &Element, base_url: &str) -> Option<MangaInfo> {
     let url = html::attr(result, "href").and_then(|href| html::resolve_url(&href, base_url))?;
     let key = slug_from_url(&url)?;
@@ -476,6 +491,57 @@ mod tests {
             entries[0].description.as_deref(),
             Some("Pirates and treasure.")
         );
+    }
+
+    #[aidoku_test]
+    fn advanced_results_map_to_manga_info() {
+        let document = parse(
+            r#"<div>
+				<div class="flex rounded-lg overflow-hidden h-46 group-data-[mode=vertical]:hidden">
+					<a href="https://natsu.one/manga/martial-peak/" class="min-w-[120px] w-23 h-full relative">
+						<img src="https://natsu.one/wp-content/uploads/2025/09/51a42f3f-320x452.png">
+					</a>
+					<a href="https://natsu.one/manga/martial-peak/" class="text-base font-medium text-white">Martial Peak</a>
+					<span class="bg-accent text-xs px-2 py-0.5 rounded-lg">Ongoing</span>
+				</div>
+				<div class="group-data-[mode=horizontal]:hidden">
+					<a href="https://natsu.one/manga/martial-peak/"><img src="https://natsu.one/wp-content/uploads/2025/09/51a42f3f-320x452.png"></a>
+					<span><img src="https://natsu.one/wp-content/themes/natsu_id/static/svg/manhua.svg" alt="manhua"></span>
+					<div><p class="font-normal text-xs">Ongoing</p></div>
+					<a href="https://natsu.one/manga/martial-peak/"><h1>Martial Peak</h1></a>
+				</div>
+			</div>
+			<div>
+				<div class="group-data-[mode=horizontal]:hidden">
+					<a href="https://natsu.one/manga/one-piece/"><img src="https://natsu.one/wp-content/uploads/2025/09/47c0ee13.png"></a>
+					<span><img src="https://natsu.one/wp-content/themes/natsu_id/static/svg/manga.svg" alt=""></span>
+					<div><p class="font-normal text-xs">Completed</p></div>
+					<a href="https://natsu.one/manga/one-piece/"><h1>One Piece</h1></a>
+				</div>
+			</div>
+			<div class="flex justify-center my-8 col-span-full">
+				<button>1</button><button>2</button>
+			</div>"#,
+        );
+        let entries = manga_info_from_advanced_results(&document, BASE);
+        assert_eq!(entries.len(), 2);
+
+        assert_eq!(entries[0].key, "martial-peak");
+        assert_eq!(entries[0].title, "Martial Peak");
+        assert_eq!(entries[0].status, Status::Ongoing);
+        assert_eq!(entries[0].viewer, Viewer::Webtoon);
+        assert_eq!(
+            entries[0].cover.as_deref(),
+            Some("https://natsu.one/wp-content/uploads/2025/09/51a42f3f.png")
+        );
+        assert_eq!(
+            entries[0].url.as_deref(),
+            Some("https://natsu.one/manga/martial-peak/")
+        );
+
+        assert_eq!(entries[1].key, "one-piece");
+        assert_eq!(entries[1].viewer, Viewer::RightToLeft);
+        assert_eq!(entries[1].status, Status::Completed);
     }
 
     #[aidoku_test]

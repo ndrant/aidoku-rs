@@ -1,9 +1,9 @@
 {
 	"info": {
-		"id": "id.komikcast",
-		"name": "KomikCast",
+		"id": "id.shinigami",
+		"name": "Shinigami",
 		"version": 1,
-		"urls": ["https://v3.komikcast.fit/"],
+		"urls": ["https://shinigami.asia/"],
 		"contentRating": 1,
 		"languages": ["id"]
 	},

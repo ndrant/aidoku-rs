@@ -9,9 +9,10 @@ crate-type = ["cdylib"]
 [features]
 # Default: all sites compiled into one binary (local dev/test).
 # Packaging builds each site separately with --no-default-features.
-default = ["komikcast", "natsu"]
+default = ["komikcast", "natsu", "shinigami"]
 komikcast = []
 natsu = []
+shinigami = []
 
 [dependencies]
 aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git", features = ["json"] }
