@@ -31,7 +31,7 @@ jobs:
 
       - name: Assemble .aix
         run: |
-          mkdir -p site
+          mkdir -p Payload site
           cp target/wasm32-unknown-unknown/release/comic_source.wasm Payload/main.wasm
           cp res/source.json Payload/source.json
           zip -r site/id.multisource.aix Payload
