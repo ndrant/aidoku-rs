@@ -1,10 +1,10 @@
 {
-  "name": "KomikCast & Natsu",
+  "name": "ndrant Sources",
   "sources": [
     {
       "id": "id.natsu",
       "name": "Natsu",
-      "version": 2,
+      "version": 3,
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.natsu.aix",
       "languages": ["id"],
       "contentRating": 1,

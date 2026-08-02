@@ -298,14 +298,15 @@ pub fn pages_from_document(document: &Document) -> Vec<Page> {
     let mut pages = Vec::new();
     if let Some(sections) = document.select("section[data-image-data]") {
         for section in sections {
-            if let Some(src) = section
-                .select_first("img")
-                .and_then(|img| html::attr(&img, "src"))
-            {
-                pages.push(Page {
-                    content: PageContent::url(&src),
-                    ..Page::default()
-                });
+            if let Some(images) = section.select("img") {
+                for image in images {
+                    if let Some(src) = html::attr(&image, "src") {
+                        pages.push(Page {
+                            content: PageContent::url(&src),
+                            ..Page::default()
+                        });
+                    }
+                }
             }
         }
     }
@@ -576,15 +577,21 @@ mod tests {
     #[aidoku_test]
     fn pages_read_from_reader_sections() {
         let document = parse(
-            r#"<section data-image-data="1"><img src="https://cdn.natsu.id/img/o/one-piece/0/1.jpg"></section>
-			<section data-image-data="2"><img src="https://cdn.natsu.id/img/o/one-piece/0/2.jpg"></section>"#,
+            r#"<section data-image-data="1"><img src="https://cdn.natsu.id/img/o/one-piece/0/1.jpg"><img src="https://cdn.natsu.id/img/o/one-piece/0/2.jpg"><img src="https://cdn.natsu.id/img/o/one-piece/0/3.jpg"></section>"#,
         );
         let pages = pages_from_document(&document);
-        assert_eq!(pages.len(), 2);
+        assert_eq!(pages.len(), 3);
         assert_eq!(
             pages[0].content,
             PageContent::Url(
                 String::from("https://cdn.natsu.id/img/o/one-piece/0/1.jpg"),
+                None
+            )
+        );
+        assert_eq!(
+            pages[2].content,
+            PageContent::Url(
+                String::from("https://cdn.natsu.id/img/o/one-piece/0/3.jpg"),
                 None
             )
         );
