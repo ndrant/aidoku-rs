@@ -87,6 +87,7 @@ fn send_raw(
         match response {
             Ok(response) => {
                 let status = response.status_code();
+                println!("[aidoku-rs] {url} -> HTTP {status}");
                 if status >= 400 {
                     return Err(AidokuError::message(format!(
                         "HTTP {status} | {url} | attempt {}",
@@ -96,6 +97,10 @@ fn send_raw(
                 return Ok(response);
             }
             Err(request_error) => {
+                println!(
+                    "[aidoku-rs] {url} -> error attempt {}: {request_error:?}",
+                    attempt + 1
+                );
                 if attempt < MAX_RETRIES {
                     continue;
                 }

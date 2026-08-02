@@ -23,6 +23,7 @@ pub struct ComicSource;
 
 impl Source for ComicSource {
     fn new() -> Self {
+        println!("[aidoku-rs] source initialized");
         Self
     }
 
