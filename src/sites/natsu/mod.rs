@@ -1,5 +1,6 @@
 use aidoku::alloc::{String, Vec};
 use aidoku::imports::html::Html;
+use aidoku::imports::net::{HttpMethod, Request};
 use aidoku::prelude::*;
 use aidoku::{AidokuError, Chapter, Manga, MangaPageResult, Page, Result};
 
@@ -134,6 +135,12 @@ fn page_list_inner(chapter: &Chapter) -> Result<Vec<Page>> {
         .ok_or_else(|| AidokuError::message("missing chapter url"))?;
     let document = network::get_html(url)?;
     Ok(pages_from_document(&document))
+}
+
+/// Builds the default request used to download chapter/cover images. Natsu's
+/// image CDN serves requests without headers, so no customization is needed.
+pub fn image_request(url: String) -> Result<Request> {
+    Ok(Request::new(url, HttpMethod::Get)?)
 }
 
 /// Extracts the manga slug from a manga key or URL.

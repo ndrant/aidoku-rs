@@ -13,7 +13,11 @@ mod utils;
 mod sites;
 
 use aidoku::alloc::{String, Vec};
-use aidoku::{Chapter, FilterValue, Manga, MangaPageResult, Page, Result, Source, prelude::*};
+use aidoku::imports::net::Request;
+use aidoku::{
+    Chapter, FilterValue, ImageRequestProvider, Manga, MangaPageResult, Page, PageContext, Result,
+    Source, prelude::*,
+};
 
 pub struct ComicSource;
 
@@ -45,4 +49,10 @@ impl Source for ComicSource {
     }
 }
 
-register_source!(ComicSource);
+impl ImageRequestProvider for ComicSource {
+    fn get_image_request(&self, url: String, context: Option<PageContext>) -> Result<Request> {
+        source::image_request(url, context)
+    }
+}
+
+register_source!(ComicSource, ImageRequestProvider);

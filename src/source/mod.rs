@@ -1,5 +1,6 @@
 use aidoku::alloc::{String, Vec};
-use aidoku::{Chapter, FilterValue, Manga, MangaPageResult, Page, Result};
+use aidoku::imports::net::Request;
+use aidoku::{Chapter, FilterValue, Manga, MangaPageResult, Page, PageContext, Result};
 
 #[cfg(feature = "komikcast")]
 use crate::sites::komikcast;
@@ -78,6 +79,29 @@ pub fn manga_update(manga: Manga, needs_details: bool, needs_chapters: bool) -> 
 #[cfg(all(feature = "natsu", not(feature = "komikcast")))]
 pub fn page_list(manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
     natsu::page_list(manga, chapter)
+}
+
+/// Builds the request used to download an image in the Natsu-only build.
+#[cfg(all(feature = "natsu", not(feature = "komikcast")))]
+pub fn image_request(url: String, _context: Option<PageContext>) -> Result<Request> {
+    natsu::image_request(url)
+}
+
+/// Builds the request used to download an image in the KomikCast-only build.
+#[cfg(all(feature = "komikcast", not(feature = "natsu")))]
+pub fn image_request(url: String, _context: Option<PageContext>) -> Result<Request> {
+    komikcast::image_request(url)
+}
+
+/// Builds the request used to download an image for whichever site owns it
+/// (multi-site build).
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
+pub fn image_request(url: String, _context: Option<PageContext>) -> Result<Request> {
+    if url.contains("natsu") {
+        natsu::image_request(url)
+    } else {
+        komikcast::image_request(url)
+    }
 }
 
 /// Fetches page images from the KomikCast-only build.

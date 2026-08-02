@@ -2,7 +2,7 @@
 	"info": {
 		"id": "id.multisource",
 		"name": "KomikCast & Natsu",
-		"version": 1,
+		"version": 2,
 		"urls": ["https://v3.komikcast.fit/", "https://natsu.one/"],
 		"contentRating": 1,
 		"languages": ["id"]

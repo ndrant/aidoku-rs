@@ -2,7 +2,7 @@
 	"info": {
 		"id": "id.komikcast",
 		"name": "KomikCast",
-		"version": 1,
+		"version": 2,
 		"urls": ["https://v3.komikcast.fit/"],
 		"contentRating": 1,
 		"languages": ["id"]

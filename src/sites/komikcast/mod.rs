@@ -1,6 +1,7 @@
 use aidoku::alloc::string::ToString;
 use aidoku::alloc::{String, Vec};
 use aidoku::helpers::uri::QueryParameters;
+use aidoku::imports::net::{HttpMethod, Request};
 use aidoku::prelude::*;
 use aidoku::{AidokuError, Chapter, Manga, MangaPageResult, Page, Result};
 
@@ -113,6 +114,12 @@ fn page_list_inner(manga: &Manga, chapter: &Chapter) -> Result<Vec<Page>> {
     let url = format!("{API_BASE_URL}/series/{slug}/chapters/{}", chapter.key);
     let response: ReaderResponse = network::get_json(&url)?;
     Ok(pages_from_reader(&response))
+}
+
+/// Builds the request used to download chapter/cover images, which are
+/// hotlink-protected and reject requests without a site Referer.
+pub fn image_request(url: String) -> Result<Request> {
+    Ok(Request::new(url, HttpMethod::Get)?.header("Referer", &format!("{BASE_URL}/")))
 }
 
 /// Extracts the series slug from a manga key or URL.

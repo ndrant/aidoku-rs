@@ -4,7 +4,7 @@
     {
       "id": "id.natsu",
       "name": "Natsu",
-      "version": 1,
+      "version": 2,
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.natsu.aix",
       "languages": ["id"],
       "contentRating": 1,
@@ -14,7 +14,7 @@
     {
       "id": "id.komikcast",
       "name": "KomikCast",
-      "version": 1,
+      "version": 2,
       "downloadURL": "https://ndrant.github.io/aidoku-rs/id.komikcast.aix",
       "languages": ["id"],
       "contentRating": 1,
