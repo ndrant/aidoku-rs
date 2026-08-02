@@ -2,7 +2,7 @@
 	"info": {
 		"id": "id.natsu",
 		"name": "Natsu",
-		"version": 4,
+		"version": 5,
 		"urls": ["https://natsu.one/"],
 		"contentRating": 1,
 		"languages": ["id"]

@@ -38,6 +38,7 @@ jobs:
             rm -rf Payload
           done
           cp index.json site/index.json
+          cp -r icons site/icons
 
       - name: Configure Pages
         uses: actions/configure-pages@v5
