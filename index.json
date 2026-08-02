@@ -1,0 +1,15 @@
+{
+  "name": "KomikCast & Natsu",
+  "sources": [
+    {
+      "id": "id.multisource",
+      "name": "KomikCast & Natsu",
+      "version": 1,
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.multisource.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://v3.komikcast.fit/",
+      "minAppVersion": "0.7.1"
+    }
+  ]
+}
