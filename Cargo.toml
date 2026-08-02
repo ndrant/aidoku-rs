@@ -6,6 +6,13 @@ edition = "2024"
 [lib]
 crate-type = ["cdylib"]
 
+[features]
+# Default: all sites compiled into one binary (local dev/test).
+# Packaging builds each site separately with --no-default-features.
+default = ["komikcast", "natsu"]
+komikcast = []
+natsu = []
+
 [dependencies]
 aidoku = { git = "https://github.com/Aidoku/aidoku-rs.git", features = ["json"] }
 serde = { version = "1.0", default-features = false, features = ["derive", "alloc"] }

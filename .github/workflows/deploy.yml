@@ -26,16 +26,18 @@ jobs:
         with:
           targets: wasm32-unknown-unknown
 
-      - name: Build WASM
-        run: cargo build --release
-
-      - name: Assemble .aix
+      - name: Build & assemble packages
         run: |
-          mkdir -p Payload site
-          cp target/wasm32-unknown-unknown/release/comic_source.wasm Payload/main.wasm
-          cp res/source.json Payload/source.json
+          mkdir -p site
+          for site in natsu komikcast; do
+            cargo build --release --no-default-features --features "$site"
+            mkdir -p Payload
+            cp target/wasm32-unknown-unknown/release/comic_source.wasm Payload/main.wasm
+            cp "res/$site.json" Payload/source.json
+            zip -r "site/id.$site.aix" Payload
+            rm -rf Payload
+          done
           cp index.json site/index.json
-          zip -r site/id.multisource.aix Payload
 
       - name: Configure Pages
         uses: actions/configure-pages@v5

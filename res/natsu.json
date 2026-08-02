@@ -1,0 +1,10 @@
+{
+	"info": {
+		"id": "id.natsu",
+		"name": "Natsu",
+		"version": 1,
+		"urls": ["https://natsu.one/"],
+		"contentRating": 1,
+		"languages": ["id"]
+	}
+}

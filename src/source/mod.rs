@@ -1,16 +1,44 @@
 use aidoku::alloc::{String, Vec};
 use aidoku::{Chapter, FilterValue, Manga, MangaPageResult, Page, Result};
 
-use crate::sites::{komikcast, natsu};
+#[cfg(feature = "komikcast")]
+use crate::sites::komikcast;
+#[cfg(feature = "natsu")]
+use crate::sites::natsu;
 
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub const SITE_KOMIKCAST: &str = "komikcast";
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub const SITE_NATSU: &str = "natsu";
 
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub const SITE_FILTER_ID: &str = "site";
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub const SITE_FILTER_VALUE_NATSU: &str = "natsu";
 
+/// Dispatches a search to the Natsu-only build.
+#[cfg(all(feature = "natsu", not(feature = "komikcast")))]
+pub fn search(
+    query: Option<String>,
+    page: i32,
+    _filters: Vec<FilterValue>,
+) -> Result<MangaPageResult> {
+    natsu::search(query, page)
+}
+
+/// Dispatches a search to the KomikCast-only build.
+#[cfg(all(feature = "komikcast", not(feature = "natsu")))]
+pub fn search(
+    query: Option<String>,
+    page: i32,
+    _filters: Vec<FilterValue>,
+) -> Result<MangaPageResult> {
+    komikcast::search(query, page)
+}
+
 /// Dispatches a search to the site selected through filters, defaulting to
-/// KomikCast when no selection is present.
+/// KomikCast when no selection is present (multi-site build).
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub fn search(
     query: Option<String>,
     page: i32,
@@ -23,7 +51,21 @@ pub fn search(
     }
 }
 
-/// Dispatches a manga update to the site that owns the manga URL.
+/// Refreshes manga details from the Natsu-only build.
+#[cfg(all(feature = "natsu", not(feature = "komikcast")))]
+pub fn manga_update(manga: Manga, needs_details: bool, needs_chapters: bool) -> Result<Manga> {
+    natsu::manga_update(manga, needs_details, needs_chapters)
+}
+
+/// Refreshes manga details from the KomikCast-only build.
+#[cfg(all(feature = "komikcast", not(feature = "natsu")))]
+pub fn manga_update(manga: Manga, needs_details: bool, needs_chapters: bool) -> Result<Manga> {
+    komikcast::manga_update(manga, needs_details, needs_chapters)
+}
+
+/// Refreshes manga details from the site that owns the manga URL
+/// (multi-site build).
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub fn manga_update(manga: Manga, needs_details: bool, needs_chapters: bool) -> Result<Manga> {
     if site_from_url(manga.url.as_deref()) == SITE_NATSU {
         natsu::manga_update(manga, needs_details, needs_chapters)
@@ -32,7 +74,20 @@ pub fn manga_update(manga: Manga, needs_details: bool, needs_chapters: bool) -> 
     }
 }
 
-/// Dispatches a page list request to the site that owns the manga URL.
+/// Fetches page images from the Natsu-only build.
+#[cfg(all(feature = "natsu", not(feature = "komikcast")))]
+pub fn page_list(manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
+    natsu::page_list(manga, chapter)
+}
+
+/// Fetches page images from the KomikCast-only build.
+#[cfg(all(feature = "komikcast", not(feature = "natsu")))]
+pub fn page_list(manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
+    komikcast::page_list(manga, chapter)
+}
+
+/// Fetches page images from the site that owns the manga URL (multi-site build).
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 pub fn page_list(manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
     if site_from_url(manga.url.as_deref()) == SITE_NATSU {
         natsu::page_list(manga, chapter)
@@ -41,6 +96,7 @@ pub fn page_list(manga: Manga, chapter: Chapter) -> Result<Vec<Page>> {
     }
 }
 
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 fn selected_site(filters: &[FilterValue]) -> &'static str {
     for filter in filters {
         if let FilterValue::Select { id, value } = filter {
@@ -56,6 +112,7 @@ fn selected_site(filters: &[FilterValue]) -> &'static str {
     SITE_KOMIKCAST
 }
 
+#[cfg(all(feature = "natsu", feature = "komikcast"))]
 fn site_from_url(url: Option<&str>) -> &'static str {
     match url {
         Some(url) if url.contains("natsu.one") => SITE_NATSU,
