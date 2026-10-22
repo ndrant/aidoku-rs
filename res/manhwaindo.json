@@ -1,0 +1,20 @@
+{
+	"info": {
+		"id": "id.manhwaindo",
+		"name": "Manhwaindo",
+		"version": 1,
+		"urls": ["https://www.manhwaindo.my/"],
+		"contentRating": 1,
+		"languages": ["id"]
+	},
+	"filters": [
+		{
+			"type": "sort",
+			"id": "sort",
+			"name": "Sort",
+			"canAscend": false,
+			"options": ["Terbaru", "Populer"]
+		}
+	]
+}
+

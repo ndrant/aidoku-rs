@@ -2,7 +2,16 @@
 // Single-site packaging builds only compile their site; silence dead-code
 // for the helpers used exclusively by the intentionally excluded modules.
 #![cfg_attr(
-    not(all(feature = "komikcast", feature = "natsu", feature = "shinigami")),
+    not(all(
+        feature = "komikcast",
+        feature = "natsu",
+        feature = "shinigami",
+        feature = "kiryuu",
+        feature = "komikindo",
+        feature = "westmanga",
+        feature = "manhwaindo",
+        feature = "komiku"
+    )),
     allow(dead_code)
 )]
 

@@ -1,6 +1,27 @@
+#[cfg(feature = "kiryuu")]
+pub mod kiryuu;
 #[cfg(feature = "komikcast")]
 pub mod komikcast;
+#[cfg(feature = "komikindo")]
+pub mod komikindo;
+#[cfg(feature = "komiku")]
+pub mod komiku;
+#[cfg(feature = "manhwaindo")]
+pub mod manhwaindo;
 #[cfg(feature = "natsu")]
 pub mod natsu;
 #[cfg(feature = "shinigami")]
 pub mod shinigami;
+#[cfg(feature = "westmanga")]
+pub mod westmanga;
+#[cfg(feature = "kiryuu")]
+pub mod kiryuu;
+#[cfg(feature = "komikindo")]
+pub mod komikindo;
+#[cfg(feature = "westmanga")]
+pub mod westmanga;
+#[cfg(feature = "manhwaindo")]
+pub mod manhwaindo;
+#[cfg(feature = "komiku")]
+pub mod komiku;
+

@@ -1,0 +1,20 @@
+{
+	"info": {
+		"id": "id.kiryuu",
+		"name": "Kiryuu",
+		"version": 1,
+		"urls": ["https://v7.kiryuu.to/"],
+		"contentRating": 1,
+		"languages": ["id"]
+	},
+	"filters": [
+		{
+			"type": "sort",
+			"id": "sort",
+			"name": "Sort",
+			"canAscend": false,
+			"options": ["Terbaru", "Populer"]
+		}
+	]
+}
+

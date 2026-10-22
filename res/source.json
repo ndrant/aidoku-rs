@@ -1,9 +1,18 @@
 {
 	"info": {
 		"id": "id.multisource",
-		"name": "KomikCast & Natsu & Shinigami",
+		"name": "Indo Multi-Source",
 		"version": 1,
-		"urls": ["https://v3.komikcast.fit/", "https://natsu.one/", "https://shinigami.asia/"],
+		"urls": [
+			"https://v3.komikcast.fit/",
+			"https://natsu.one/",
+			"https://shinigami.asia/",
+			"https://v7.kiryuu.to/",
+			"https://komikindo.ch/",
+			"https://www.westmanga.shop/",
+			"https://www.manhwaindo.my/",
+			"https://01.komiku.asia/"
+		],
 		"contentRating": 1,
 		"languages": ["id"]
 	},
@@ -12,8 +21,26 @@
 			"type": "select",
 			"id": "site",
 			"name": "Site",
-			"options": ["KomikCast", "Natsu", "Shinigami"],
-			"ids": ["komikcast", "natsu", "shinigami"],
+			"options": [
+				"KomikCast",
+				"Natsu",
+				"Shinigami",
+				"Kiryuu",
+				"Komikindo",
+				"WestManga",
+				"Manhwaindo",
+				"Komiku"
+			],
+			"ids": [
+				"komikcast",
+				"natsu",
+				"shinigami",
+				"kiryuu",
+				"komikindo",
+				"westmanga",
+				"manhwaindo",
+				"komiku"
+			],
 			"default": "komikcast"
 		},
 		{

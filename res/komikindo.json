@@ -1,0 +1,20 @@
+{
+	"info": {
+		"id": "id.komikindo",
+		"name": "Komikindo",
+		"version": 1,
+		"urls": ["https://komikindo.ch/"],
+		"contentRating": 1,
+		"languages": ["id"]
+	},
+	"filters": [
+		{
+			"type": "sort",
+			"id": "sort",
+			"name": "Sort",
+			"canAscend": false,
+			"options": ["Terbaru", "Populer"]
+		}
+	]
+}
+

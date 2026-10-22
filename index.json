@@ -33,6 +33,61 @@
       "contentRating": 1,
       "baseURL": "https://shinigami.asia/",
       "minAppVersion": "0.7.1"
+    },
+    {
+      "id": "id.kiryuu",
+      "name": "Kiryuu",
+      "version": 1,
+      "iconURL": "icons/id.kiryuu.png",
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.kiryuu.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://v7.kiryuu.to/",
+      "minAppVersion": "0.7.1"
+    },
+    {
+      "id": "id.komikindo",
+      "name": "Komikindo",
+      "version": 1,
+      "iconURL": "icons/id.komikindo.png",
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.komikindo.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://komikindo.ch/",
+      "minAppVersion": "0.7.1"
+    },
+    {
+      "id": "id.westmanga",
+      "name": "WestManga",
+      "version": 1,
+      "iconURL": "icons/id.westmanga.png",
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.westmanga.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://www.westmanga.shop/",
+      "minAppVersion": "0.7.1"
+    },
+    {
+      "id": "id.manhwaindo",
+      "name": "Manhwaindo",
+      "version": 1,
+      "iconURL": "icons/id.manhwaindo.png",
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.manhwaindo.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://www.manhwaindo.my/",
+      "minAppVersion": "0.7.1"
+    },
+    {
+      "id": "id.komiku",
+      "name": "Komiku",
+      "version": 1,
+      "iconURL": "icons/id.komiku.png",
+      "downloadURL": "https://ndrant.github.io/aidoku-rs/id.komiku.aix",
+      "languages": ["id"],
+      "contentRating": 1,
+      "baseURL": "https://01.komiku.asia/",
+      "minAppVersion": "0.7.1"
     }
   ]
 }
